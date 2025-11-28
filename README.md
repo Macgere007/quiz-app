@@ -1,94 +1,84 @@
-🚀 Programming Quiz Web App
+# 🚀 Programming Quiz Web App
 
 A simple interactive web application that allows users to:
 
-✅ Take a multiple-choice programming quiz
-✅ See correct/incorrect answers instantly
-✅ View their final score
-✅ Log in using Firebase Authentication
-✅ Upload a local profile picture
-✅ Profile picture appears in both navbar and dropdown
-✅ Image is saved in browser (localStorage) — survives refresh
+- ✔️ Take a multiple-choice programming quiz  
+- ✔️ See correct/incorrect answers instantly  
+- ✔️ View their final score  
+- ✔️ Log in with Firebase Authentication  
+- ✔️ Upload a local profile picture  
+- ✔️ Profile picture appears in both navbar and dropdown  
+- ✔️ Image saved in `localStorage` (survives refresh)
 
-📸 Features
-👤 User Login
+---
 
-Firebase Authentication (Email & Password)
+## 📸 Features
 
-Shows the logged-in user's email
+### 👤 User Login
+- Firebase Authentication (Email & Password)
+- Shows logged-in user's email
+- Logout button inside the profile dropdown
 
-Logout button inside profile dropdown
+### 🖼 Profile Picture Upload
+- Upload image from device
+- Updates instantly on:
+  - Navbar profile picture
+  - Dropdown large profile picture
+- Saves to `localStorage` so it persists after refresh
+- No backend or cloud upload needed
 
-🖼 Profile Picture Upload
+### 🧠 Quiz Functionality
+- Shows questions one at a time
+- Highlights:
+  - 🟩 Correct = Green  
+  - 🟥 Wrong = Red  
+- Prevents changing answers
+- Next button loads the next question
+- Shows final score at the end
 
-User can upload an image from their device
+---
 
-Picture instantly updates:
+## 🛠 Technologies Used
+- **HTML** — Structure  
+- **CSS** — UI Styling  
+- **JavaScript** — Quiz logic, events  
+- **Firebase Authentication**  
+- **localStorage** — Save profile photo  
 
-Navbar profile picture
+---
 
-Dropdown big profile picture
+<!--
+## 📂 Project Structure
 
-Saved using localStorage, so it remains even after refresh
-
-No server / cloud upload needed
-
-🧠 Quiz Functionality
-
-Displays questions one by one
-
-Highlights:
-
-🟩 Correct answer (green)
-
-🟥 Selected wrong answer (red)
-
-Prevents changing answer after selection
-
-Next button loads the next question
-
-Final score shown at the end
-
-🛠 Technologies Used
-
-HTML – Structure
-
-CSS – Styling
-
-JavaScript – Logic + quiz system
-
-Firebase
-
-Authentication
-
-LocalStorage – Save profile photo
-
-📂 Project Structure
 /project
 │
 └── src/
-    │
-    ├── index.html          # Main UI (quiz + profile dropdown)
-    ├── index.js            # Quiz logic + profile upload + Firebase auth
-    ├── style.css           # Styles for quiz & UI components
-    └── default_profile.png # Fallback profile picture
+    ├── index.html
+    ├── index.js
+    ├── style.css
+    └── default_profile.png
+│
 ├── login.html
-├── firebase_config.js
+└── firebase_config.js
+-->
 
+---
 
+## ⚙️ Setup Instructions
 
-⚙️ Setup Instructions
-1. Clone or Download the Project
-git clone <your-repo-url>
+### 1. Download the Project
+Download or copy the files to your workspace.
 
-2. Set Up Firebase
+git clone ... 
 
-Inside firebase_config.js, keep your Firebase config:
+### 2. Configure Firebase 
+- npm install firebase
+- Edit `firebase_config.js` and insert your Firebase configuration:
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-const firebaseConfig =  {
+const firebaseConfig = {
    apiKey: "...",
    authDomain: "...",
    projectId: "...",
@@ -97,33 +87,11 @@ const firebaseConfig =  {
    appId: "..."
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Export auth so your index.js can import it
 export const auth = getAuth(app);
 
-export default firebaseConfig; 
+export default firebaseConfig;
 
+3. run ./login.html
 
-3. Open the App
-
-Just open login.html in your browser and register with credential info.
-
-🎯 How Profile Upload Works
-
-When the user picks a photo, it is converted to Base64 using FileReader
-
-Stored in browser using:
-
-localStorage.setItem("profileImage", base64Data);
-
-
-On page load, app checks:
-
-localStorage.getItem("profileImage");
-
-
-If found → used as navbar & dropdown image
-
-If not → fallback to Firebase photoURL → fallback to default image
