@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Programming Quiz</title>
+    <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <div class="navbar">
+        <h2 class="title">Programming Quiz</h2>
+       <img id="navPic" class="nav-profile" src="./default_profile.png">
+    </div>
+
+    <!-- DROPDOWN PANEL -->
+    <div id="profileDropdown" class="dropdown hidden">
+        <img id="dropdownPic" class="big-pic" src="./default_profile.png" />
+        <p id="dropdownEmail" class="email"></p>
+
+        <input type="file" id="uploadInput" accept="image/*" hidden>
+        <button id="uploadBtn" class="upload-btn">Upload Photo</button>
+
+        <button id="logoutBtn" class="logout-btn">Logout</button>
+    </div>
+
+
+    <!-- QUIZ SECTION -->
+    <div class="quiz-container">
+
+        <div id="question" class="question">Loading question...</div>
+
+        <div id="options" class="options"></div>
+
+        <button id="nextBtn" class="quiz-btn">Next</button>
+
+        <p id="result" class="result"></p>
+    </div>
+
+    <script type="module" src="./index.js"></script>
+</body>
+</html>

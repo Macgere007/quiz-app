@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cute Lamp Login</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+        :root {
+            --bg-color: #2b2d42;
+            --form-bg: #1a1c29;
+            --text-color: #edf2f4;
+            --accent-color: #ef233c;
+            --lamp-color: #bfaea2;
+            --light-beam: rgba(255, 236, 179, 0.6);
+            --input-bg: #292c3b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            transition: background-color 0.5s ease;
+        }
+
+        body.dark-mode {
+            background-color: #0d0e15;
+        }
+
+        .container {
+            display: flex;
+            width: 850px;
+            height: 550px;
+            background-color: var(--form-bg);
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Lamp Section */
+        .lamp-wrapper {
+            flex: 1;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            background: linear-gradient(to bottom, #35384e, #20222e);
+            overflow: hidden;
+            z-index: 1;
+            transition: background 0.3s;
+        }
+
+        .lamp-wrapper.off { background: #111; }
+
+        .lamp {
+            position: absolute;
+            bottom: 50px;
+            width: 160px;
+            height: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .light {
+            position: absolute;
+            top: 110px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-bottom: 500px solid var(--light-beam);
+            opacity: 1;
+            filter: blur(20px);
+            transition: opacity 0.3s ease;
+        }
+
+        .lamp-wrapper.off .light { opacity: 0; }
+
+        .shade {
+            width: 140px;
+            height: 110px;
+            background: #e0d6ce;
+            border-radius: 20px 20px 10px 10px;
+            position: relative;
+            transition: background-color 0.3s;
+        }
+
+        .lamp-wrapper.off .shade { background: #444; }
+
+        .face {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 40px;
+        }
+
+        .eyes {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .eye {
+            width: 12px;
+            height: 12px;
+            background: #333;
+            border-radius: 50%;
+            transition: 0.2s;
+        }
+
+        .eye.squint {
+            height: 2px;
+            transform: translateY(5px);
+        }
+
+        .mouth {
+            width: 16px;
+            height: 8px;
+            background: #333;
+            border-radius: 0 0 16px 16px;
+            margin: 8px auto 0;
+            transition: 0.2s;
+        }
+
+        .stand {
+            width: 10px;
+            height: 150px;
+            background: #8d8177;
+        }
+
+        .base {
+            width: 80px;
+            height: 20px;
+            background: #bfaea2;
+            border-radius: 50% 50% 0 0;
+            margin-top: -10px;
+        }
+
+        .cord {
+            position: absolute;
+            top: 100px;
+            left: 110px;
+            width: 2px;
+            height: 60px;
+            background: #333;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .cord::after {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background: #ef233c;
+            border-radius: 50%;
+            position: absolute;
+            bottom: -10px;
+            left: -4px;
+        }
+
+        /* Form Section */
+        .login-wrapper {
+            flex: 1;
+            padding: 50px;
+            color: var(--text-color);
+        }
+
+        h2 { font-size: 2rem; margin-bottom: 10px; }
+
+        .input-group { margin-bottom: 20px; }
+        label { color: #ccc; margin-bottom: 8px; display: block; }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            background: var(--input-bg);
+            border-radius: 8px;
+            border: 2px solid transparent;
+            color: #fff;
+        }
+
+        input:focus { border-color: #4cc9f0; }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #4cc9f0;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .toggle-link { margin-top: 20px; text-align: center; color: #888; }
+        .toggle-link span { color: #4cc9f0; cursor: pointer; }
+
+        #message { margin-top: 15px; height: 20px; }
+        .error { color: #ef233c; }
+        .success { color: #4cc9f0; }
+    </style>
+</head>
+
+<body class="light-mode">
+
+    <div class="container">
+        <div class="lamp-wrapper" id="lampRoom">
+            <div class="light"></div>
+
+            <div class="lamp">
+                <div class="shade">
+                    <div class="face">
+                        <div class="eyes">
+                            <div class="eye" id="eyeLeft"></div>
+                            <div class="eye" id="eyeRight"></div>
+                        </div>
+                        <div class="mouth" id="mouth"></div>
+                    </div>
+                    <div class="cord" id="cordSwitch"></div>
+                </div>
+                <div class="stand"></div>
+                <div class="base"></div>
+            </div>
+        </div>
+
+        <div class="login-wrapper">
+            <h2 id="formTitle">Welcome Back</h2>
+            <p id="formSubtitle">Login to continue</p>
+
+            <form id="authForm">
+                <div class="input-group">
+                    <label>Email</label>
+                    <input type="email" id="email" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" id="password" required>
+                </div>
+
+                <button type="submit" id="submitBtn">Login</button>
+            </form>
+
+            <p class="toggle-link">
+                <span id="toggleBtn">Register</span>
+            </p>
+
+            <div id="message"></div>
+        </div>
+    </div>
+
+    <!-- Firebase -->
+  <script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+import firebaseConfig from "./firebase_config.js"; 
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// UI Elements
+const eyeLeft = document.getElementById("eyeLeft");
+const eyeRight = document.getElementById("eyeRight");
+const mouth = document.getElementById("mouth");
+const lampRoom = document.getElementById("lampRoom");
+const cord = document.getElementById("cordSwitch");
+
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+const toggleBtn = document.getElementById("toggleBtn");
+const submitBtn = document.getElementById("submitBtn");
+const formTitle = document.getElementById("formTitle");
+const message = document.getElementById("message");
+
+let isLogin = true;
+let lightOn = true;
+
+// Toggle Login / Register
+toggleBtn.onclick = () => {
+    isLogin = !isLogin;
+    formTitle.textContent = isLogin ? "Welcome Back" : "Create Account";
+    submitBtn.textContent = isLogin ? "Login" : "Register";
+    toggleBtn.textContent = isLogin ? "Register" : "Login";
+};
+
+// Lamp Click to toggle light
+cord.onclick = () => {
+    lightOn = !lightOn;
+    lampRoom.classList.toggle("off");
+    blink();
+};
+
+// Blink Animation
+function blink() {
+    eyeLeft.classList.add("squint");
+    eyeRight.classList.add("squint");
+    mouth.style.height = "4px";
+    
+    setTimeout(() => {
+        eyeLeft.classList.remove("squint");
+        eyeRight.classList.remove("squint");
+        mouth.style.height = "8px";
+    }, 200);
+}
+
+// Form Submit
+document.getElementById("authForm").onsubmit = async (e) => {
+    e.preventDefault();
+    const email = emailInput.value;
+    const password = passwordInput.value;
+
+    try {
+        if (isLogin) {
+            await signInWithEmailAndPassword(auth, email, password);
+            show("Login Success!", "success");
+        } else {
+            const user = (await createUserWithEmailAndPassword(auth, email, password)).user;
+            await setDoc(doc(db, "users", user.uid), {
+                email,
+                createdAt: new Date().toISOString()
+            });
+            show("Account Created!", "success");
+        }
+
+        blink();
+        setTimeout(() => window.location.href = "./src/index.html", 1000);
+
+    } catch (err) {
+        show(err.message, "error");
+    }
+};
+
+// Helper Show
+function show(text, type) {
+    message.textContent = text;
+    message.className = type;
+}
+</script>
+
+
+
+</body>
+</html>
