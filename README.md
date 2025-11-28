@@ -94,5 +94,5 @@ export const auth = getAuth(app);
 export default firebaseConfig;
 ```
 
-3. run ./login.html
+### 3. run ./login.html
 
