@@ -69,12 +69,12 @@ A simple interactive web application that allows users to:
 ### 1. Download the Project
 Download or copy the files to your workspace.
 
-git clone ... 
+```git clone ...``` 
 
 ### 2. Configure Firebase 
 - npm install firebase
 - Edit `firebase_config.js` and insert your Firebase configuration:
-
+```
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
@@ -92,6 +92,7 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 
 export default firebaseConfig;
+```
 
 3. run ./login.html
 
