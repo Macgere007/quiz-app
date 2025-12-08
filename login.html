@@ -211,9 +211,27 @@
         .toggle-link { margin-top: 20px; text-align: center; color: #888; }
         .toggle-link span { color: #4cc9f0; cursor: pointer; }
 
-        #message { margin-top: 15px; height: 20px; }
-        .error { color: #ef233c; }
-        .success { color: #4cc9f0; }
+     #message {
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+        }
+
+        .msg {
+            margin-top: 25px;
+            text-align: center;
+            font-size: 0.95rem;
+            min-height: 22px;
+        }
+
+        .success {
+            color: #4cf05a;
+        }
+
+        .error {
+            color: #ef233c;
+        }
+
+
     </style>
 </head>
 
@@ -261,7 +279,7 @@
                 <span id="toggleBtn">Register</span>
             </p>
 
-            <div id="message"></div>
+            <div id="message" class="msg"></div>
         </div>
     </div>
 
@@ -295,7 +313,10 @@ let lightOn = true;
 
 // Toggle Login / Register
 toggleBtn.onclick = () => {
+    console.log("TOGGLE PRESSED");
     isLogin = !isLogin;
+    console.log("isLogin =", isLogin);
+
     formTitle.textContent = isLogin ? "Welcome Back" : "Create Account";
     submitBtn.textContent = isLogin ? "Login" : "Register";
     toggleBtn.textContent = isLogin ? "Register" : "Login";
@@ -324,35 +345,68 @@ function blink() {
 // Form Submit
 document.getElementById("authForm").onsubmit = async (e) => {
     e.preventDefault();
+
+    // show("Account Created!", "success");
+    // console.log("Register");
+
     const email = emailInput.value;
     const password = passwordInput.value;
 
     try {
-        if (isLogin) {
+       if (isLogin) {
             await signInWithEmailAndPassword(auth, email, password);
             show("Login Success!", "success");
+            blink();
+            setTimeout(() => window.location.href = "./src/index.html", 1500);
         } else {
             const user = (await createUserWithEmailAndPassword(auth, email, password)).user;
+            show("Account Created!", "success");
+            blink();
+            console.log("Register");
             await setDoc(doc(db, "users", user.uid), {
                 email,
                 createdAt: new Date().toISOString()
             });
-            show("Account Created!", "success");
-        }
+            
+         
+          
+}
 
-        blink();
-        setTimeout(() => window.location.href = "./src/index.html", 1000);
 
     } catch (err) {
-        show(err.message, "error");
+        // 🔥 CUSTOM FRIENDLY FIREBASE ERRORS
+        if (err.code === "auth/email-already-in-use") {
+            show("Email already registered. Please log in.", "error");
+        }
+        else if (err.code === "auth/wrong-password") {
+            show("Incorrect password.", "error");
+        }
+        else if (err.code === "auth/user-not-found") {
+            show("No account found with that email.", "error");
+        }
+        else if (err.code === "auth/weak-password") {
+            show("Password must be at least 6 characters.", "error");
+        }
+        else {
+            show(err.message, "error");
+        }
     }
 };
 
 // Helper Show
 function show(text, type) {
+    console.log("SHOW CALLED:", text, type);
+
     message.textContent = text;
-    message.className = type;
+    message.className = "msg " + (type === "error" ? "error" : "success");
+
+    message.style.opacity = 1;
+
+    setTimeout(() => {
+        message.style.opacity = 0;
+    }, 2000);
 }
+
 </script>
 
 

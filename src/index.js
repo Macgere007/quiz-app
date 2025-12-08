@@ -19,12 +19,16 @@ onAuthStateChanged(auth, (user) => {
     if (user) {
         dropdownEmail.textContent = user.email;
 
-        const savedPic = localStorage.getItem("profileImage");
+        const key = "profileImage_" + user.uid;
+        const savedPic = localStorage.getItem(key);
 
-        navPic.src = savedPic || user.photoURL || "default_profile.png";
-        dropdownPic.src = savedPic || user.photoURL || "default_profile.png";
+        const finalPic = savedPic || user.photoURL || "default_profile.png";
+
+        navPic.src = finalPic;
+        dropdownPic.src = finalPic;
     }
 });
+
 
 
 // ----------------------------------------------
@@ -187,24 +191,27 @@ window.onload = () => {
     });
 
     // ----------------- UPLOAD HANDLER --------------------
-    uploadInput.addEventListener("change", function () {
-        const file = this.files[0];
-        if (!file) return;
+  uploadInput.addEventListener("change", function () {
+    const file = this.files[0];
+    if (!file) return;
 
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            const data = e.target.result;
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        const data = e.target.result;
 
-            // Update UI
-            navPic.src = data;
-            dropdownPic.src = data;
+        const key = "profileImage_" + auth.currentUser.uid;
 
-            // Save to localStorage
-            localStorage.setItem("profileImage", data);
+        // Save image for this user ONLY
+        localStorage.setItem(key, data);
 
-            console.log("Saved to localStorage!");
-        };
+        // Update UI
+        navPic.src = data;
+        dropdownPic.src = data;
 
-        reader.readAsDataURL(file);
-    });
+        console.log("Saved to localStorage for user:", key);
+    };
+
+    reader.readAsDataURL(file);
+});
+
 };
